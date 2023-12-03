@@ -22,7 +22,6 @@ export const App = () => {
       firstUpdate.current = false;
     } else {
       const stringafiendContacts = JSON.stringify(contacts);
-      console.log(contacts);
       localStorage.setItem('contacts', stringafiendContacts);
     }
   }, [contacts]);
