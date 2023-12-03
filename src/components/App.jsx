@@ -3,42 +3,31 @@ import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
 import { useEffect } from 'react';
 import { useState } from 'react';
+import { useRef } from 'react';
 
 export const App = () => {
-  // state = {
-  //   contacts: [],
-  //   filter: '',
-  // };
-
   const [contacts, setContacts] = useState([]);
   const [filter, setFilter] = useState('');
 
-  // componentDidMount() {
-  //   const stringafiendContacts = localStorage.getItem('contacts');
-  //   const parsedContacts = JSON.parse(stringafiendContacts) ?? [];
-  //   this.setState({ contacts: parsedContacts });
-  // }
-
   useEffect(() => {
     const stringafiendContacts = localStorage.getItem('contacts');
+
     const parsedContacts = JSON.parse(stringafiendContacts) ?? [];
     setContacts(parsedContacts);
   }, []);
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (prevState.contacts !== this.state.contacts) {
-  //     const stringafiendContacts = JSON.stringify(this.state.contacts);
-  //     localStorage.setItem('contacts', stringafiendContacts);
-  //   }
-  // }
-
+  const firstUpdate = useRef(true);
   useEffect(() => {
-    const stringafiendContacts = JSON.stringify(contacts);
-    localStorage.setItem('contacts', stringafiendContacts);
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+    } else {
+      const stringafiendContacts = JSON.stringify(contacts);
+      console.log(contacts);
+      localStorage.setItem('contacts', stringafiendContacts);
+    }
   }, [contacts]);
 
   const conactList = contactData => {
-    // const { contacts } = contacts;
     if (
       contacts.some(
         elm =>
@@ -53,23 +42,13 @@ export const App = () => {
     }
 
     setContacts(prevState => [...prevState, contactData]);
-
-    // this.setState(prevState => {
-    //   return {
-    //     contacts: [...prevState.contacts, contactData],
-    //   };
-    // });
   };
 
   const filterName = filter => {
-    // this.setState({ filter });
     setFilter(filter);
   };
 
   const deleteItem = id => {
-    // this.setState({
-    //   contacts: this.state.contacts.filter(product => product.id !== id),
-    // });
     setContacts(contacts.filter(product => product.id !== id));
   };
 
